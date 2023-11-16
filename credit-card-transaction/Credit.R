@@ -20,3 +20,27 @@ more_credit <- credit %>%
   )
 str(more_credit)
 
+# Plots
+
+par(mar = c(5, 4, 4, 2) + 0.1) # Adjusts margins of the plots
+
+hist(more_credit$Transaction.Amount,
+     main="Histogram on transaction Amount",
+     xlab="Transaction Amount in Dollars",
+     ylab="Frequency",
+     col="blue",
+     border="black",
+     xlim= c(min(more_credit$Transaction.Amount), max(more_credit$Transaction.Amount)),
+     ylim = c(0, max(more_credit$Transaction.Amount)),
+     breaks= 12
+)
+
+boxplot(more_credit$Transaction.Amount ~ more_credit$Category,
+        main = "Boxplot of Categories by Transaction",
+        xlab = "Categories",
+        ylab = "Transaction Amount in Dollars",
+        border= "black",
+        col= "grey",
+)
+
+
