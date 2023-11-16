@@ -45,5 +45,5 @@ boxplot(more_credit$Transaction.Amount ~ more_credit$Category,
 
 #Creating a Stacked bar plot
 ggplot(more_credit, aes(fill=Category, y=Transaction.Amount, x=Month)) + 
-  geom_bar(Category='stack',stat='identity')
+geom_bar(stat='identity')
 
