@@ -19,10 +19,10 @@ more_credit <- credit %>%
     Transaction_Category_Count = ave(Transaction.Amount, Category, FUN = length)
   )
 str(more_credit)
+head(more_credit)
 
 # Plots
 
-par(mar = c(5, 4, 4, 2) + 0.1) # Adjusts margins of the plots
 
 hist(more_credit$Transaction.Amount,
      main="Histogram on transaction Amount",
@@ -43,4 +43,7 @@ boxplot(more_credit$Transaction.Amount ~ more_credit$Category,
         col= "grey",
 )
 
+#Creating a Stacked bar plot
+ggplot(more_credit, aes(fill=Category, y=Transaction.Amount, x=Month)) + 
+  geom_bar(Category='stack',stat='identity')
 
