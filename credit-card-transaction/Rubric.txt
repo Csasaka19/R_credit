@@ -1,0 +1,68 @@
+CREDIT CARD TRANSACTION DATASET THAT HAS:
+Features:
+
+Customer ID: Unique identifiers for every customer.
+Name: First name of the customer.
+Surname: Last name of the customer.
+Gender: The gender of the customer.
+Birthdate: Date of birth for each customer.
+Transaction Amount: The dollar amount for each transaction.
+Date: Date when the transaction occurred.
+Merchant Name: The name of the merchant where the transaction took place.
+Category: Categorization of the transaction.
+
+
+--> This dataset can be used mostly for analytics of various trends within the transaction world
+--> This dataset can be used in fraud detection by isolating irregular transaction activities within the dataset.
+
+
+Initial cleaning of the data will contain:
+Age of credit card owners
+Frequency of transactions.
+Category transaction count is also needed.
+Month and exact dates of transactions should be extracted.(Year is constant - 2023)
+
+Plots.
+--> Histogram of Transaction Amount:
+* To visualize the distribution of transaction amounts using a histogram.
+* This identifies the most common transaction amounts and detect outliers.
+
+--> Boxplot of Transaction Amount by Category:
+* Boxplot to compares the distribution of transaction amounts across different categories.
+* This identifies categories with higher or lower transaction amounts.
+
+--> Line Plot of Transaction Frequency Over Time:
+* Line plot will show how transaction frequency changes over time (using month and year).
+* This identifies trends or seasonality in transaction frequency.
+
+--> Bar Plot of Transaction Category Count:
+* Bar plot to shows the count of transactions in each category.
+* This helps in identifying the most popular transaction categories.
+
+--> Scatter Plot of Transaction Amount vs. Age:
+* Explores the relationship between transaction amount and customer age using a scatter plot.
+* Thisidentifies any patterns or correlations between age and transaction amount.
+
+--> Pie Chart of Gender Distribution:
+* A pie chart is created to visualize the distribution of gender among customers.
+* This provides an overview of the gender distribution in the dataset.
+
+--> Heatmap of Correlations:
+* Create a heatmap to visualize correlations between numerical variables (e.g., transaction amount, age, transaction frequency).
+* This identifies relationships between different variables.
+
+Why??
+Insight into Customer Behavior:
+Analyzing transaction frequency, amount, and categories can provide insights into customer behavior and preferences.
+
+Temporal Trends:
+Analyzing transactions over time can help identify temporal trends, seasonality, or any patterns that might be valuable for understanding customer behavior.
+
+Identifying Outliers:
+Plots such as boxplots and histograms can help identify outliers in transaction amounts, allowing for further investigation.
+
+Demographic Analysis:
+Age and gender analysis can help in understanding the demographics of customers and their spending patterns.
+
+Category Insights:
+Analyzing transaction categories can provide insights into which types of merchants or transactions are more common among customers.
