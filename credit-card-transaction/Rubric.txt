@@ -31,6 +31,10 @@ Plots.
 * Boxplot to compares the distribution of transaction amounts across different categories.
 * This identifies categories with higher or lower transaction amounts.
 
+--> Stacked Bar plot of Transaction Amount by Category:
+* The stacked bar plot shows the distinct category of items purchased by amount over a 12 month period.
+* This identifies categories with higher or lower transaction amounts.
+
 --> Line Plot of Transaction Frequency Over Time:
 * Line plot will show how transaction frequency changes over time (using month and year).
 * This identifies trends or seasonality in transaction frequency.
