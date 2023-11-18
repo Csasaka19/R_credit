@@ -8,6 +8,7 @@
     - [Histogram of Transaction Amount](#histogram-of-transaction-amount)
     - [Boxplot of Transaction Amount by Category](#boxplot-of-transaction-amount-by-category)
     - [Line Plot of Transaction Frequency Over Time](#line-plot-of-transaction-frequency-over-time)
+    - [Stacked bar_plot of Category Transaction Amount](#stacked-bar-plot-of-transaction-amount-by-category)
     - [Bar Plot of Transaction Category Count](#bar-plot-of-transaction-category-count)
     - [Scatter Plot of Transaction Amount vs. Age](#scatter-plot-of-transaction-amount-vs-age)
     - [Pie Chart of Gender Distribution](#pie-chart-of-gender-distribution)
@@ -50,6 +51,10 @@ This dataset is valuable for analytics of various trends within the transaction 
 - Compare the distribution of transaction amounts across different categories.
 - Identify categories with higher or lower transaction amounts.
 
+### Stacked Bar plot of Transaction Amount by Category:
+- The stacked bar plot shows the distinct category of items purchased by amount over a 12-month period.
+- This identifies categories with higher or lower transaction amounts.
+
 ### Line Plot of Transaction Frequency Over Time:
 - Show how transaction frequency changes over time (using month and year).
 - Identify trends or seasonality in transaction frequency.
@@ -87,3 +92,4 @@ This dataset is valuable for analytics of various trends within the transaction 
 5. **Category Insights:**
    Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers.
 
+## Static analysis of this data was done in the credit.R file.
