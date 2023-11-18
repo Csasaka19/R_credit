@@ -1,0 +1,67 @@
+Credit Card Transaction Dashboard Rubric
+
+1. Data Import and Cleaning:
+   - Objective: Ensure that the data is imported correctly, and any necessary cleaning operations are performed.
+   - Criteria:
+     - Data is successfully imported from the CSV file.
+     - Duplicate rows are removed.
+     - Missing values, if any, are handled appropriately.
+
+2. Data Exploration and Summary:
+   - Objective: Provide an overview of the dataset to understand its structure and characteristics.
+   - Criteria:
+     - Display basic statistics (mean, median, min, max) for relevant numerical variables (e.g., Transaction Amount, Age).
+     - Showcase summary statistics such as the number of unique customers, categories, etc.
+
+3. Visualizations:
+   - Objective: Create informative and insightful visualizations to convey key information.
+   - Criteria:
+     - Histogram: Display the distribution of transaction amounts.
+     - Boxplot: Analyze transaction amounts across different categories.
+     - Stacked Bar Plot: Visualize transaction amounts by category over time.
+     - Pie Chart: Illustrate the gender distribution.
+     - Line Plot: Depict the trend of transaction frequency over time. etc
+
+4. Dashboard Layout:
+   - Objective: Design an organized and visually appealing dashboard layout.
+   - Criteria:
+     - Use a dashboard framework or tool of your choice (e.g., Shiny, R Markdown, or other dashboard libraries).
+     - Divide the dashboard into logical sections for each visualization.
+     - Provide titles and axis labels for each visualization.
+
+ 5.Interactivity:
+   - Objective: Allow users to interact with the dashboard for a more dynamic experience.
+   - Criteria:
+     - If using a tool like Shiny, implement interactive features (e.g., sliders, dropdowns) for users to customize visualizations.
+     - Consider adding tooltips or pop-ups to provide additional information on data points.
+
+6. Documentation:
+   - Objective: Include clear documentation for users to understand the dashboard and its components.
+   - Criteria:
+     - Provide a brief description of the dataset and the purpose of the dashboard.
+     - Document any assumptions or limitations.
+     - Include instructions on how to use the dashboard and interpret visualizations.
+
+7. Code Structure:
+   - Objective: Ensure that the R code is well-organized and easy to understand.
+   - Criteria:
+     - Use comments to explain each section of the code.
+     - Include a header with relevant information (e.g., author, date, purpose).
+     - Consider modularizing code for better maintainability.
+
+8. Deployment (if applicable):
+   - Objective: If deploying the dashboard for broader use, ensure smooth deployment.
+   - Criteria:
+     - Provide clear instructions on how to access and use the dashboard.
+     - Address any dependencies or prerequisites for deployment.
+     - Verify that the dashboard functions as expected in a deployed environment.
+
+9. User Feedback:
+   - Objective: Gather feedback from potential users to improve the dashboard.
+   - Criteria:
+     - Encourage users to provide feedback on usability, clarity, and any additional features they might find helpful.
+     - Use feedback to iterate and enhance the dashboard as needed.
+
+Additional Considerations:
+   - Ensure the dashboard is responsive and works well on different screen sizes.
+   - Explore other potential visualizations or features that could enhance the dashboard's utility.
