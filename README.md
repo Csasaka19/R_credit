@@ -92,4 +92,4 @@ This dataset is valuable for analytics of various trends within the transaction 
 5. **Category Insights:**
    Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers.
 
-## Static analysis of this data was done in the credit.R file.
+## Static analysis of this data was done in the Credit_card_analysis_static directory.
