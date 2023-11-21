@@ -5,7 +5,10 @@ library(ggplot2)
 library(lubridate)
 
 # Imports the data from a csv file
-credit <- read.csv("~/Documents/R_3.1Project/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv")
+credit <- read.csv("~/Documents/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
+
+# Convert the 'Date' column to Date object
+credit$Date <- as.Date(credit$Date)
 
 more_credit <- credit %>%
   select(Customer.ID, Birthdate, Date, Transaction.Amount, Category, Gender, Name, Surname, Merchant.Name) %>%
@@ -25,7 +28,7 @@ ui <- fluidPage(
   titlePanel("Credit Card Analysis Dashboard"),
   sidebarLayout(
     sidebarPanel(
-      # You can add input controls here (e.g., filters, dropdowns)
+      selectInput("categoryFilter", "Select Category", choices = c("All", unique(more_credit$Category))),
     ),
     mainPanel(
       plotOutput("histogram"),
@@ -41,22 +44,46 @@ ui <- fluidPage(
 # Define server
 server <- function(input, output) {
   
+  filtered_data <- reactive({
+    # Apply filters to the data
+    filtered_data <- more_credit
+    
+    if (input$categoryFilter != "All") {
+      filtered_data <- filtered_data %>% filter(Category == input$categoryFilter)
+    }
+    
+    return(filtered_data)
+  })
+  
   # Histogram
   output$histogram <- renderPlot({
-    hist(more_credit$Transaction.Amount,
+    filtered_data_plot <- filtered_data()
+    
+    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
+      # Handle the case when the filtered data is empty or NULL
+      return(NULL)
+    }
+    
+    hist(filtered_data_plot$Transaction.Amount,
          main = "Histogram on Transaction Amount",
          xlab = "Transaction Amount in Dollars",
          ylab = "Frequency",
          col = "blue",
          border = "black",
-         xlim = c(min(more_credit$Transaction.Amount), max(more_credit$Transaction.Amount)),
          breaks = 12
     )
   })
   
   # Boxplot
   output$boxplot <- renderPlot({
-    boxplot(more_credit$Transaction.Amount ~ more_credit$Category,
+    filtered_data_plot <- filtered_data()
+    
+    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
+      # Handle the case when the filtered data is empty or NULL
+      return(NULL)
+    }
+    
+    boxplot(filtered_data_plot$Transaction.Amount ~ filtered_data_plot$Category,
             main = "Boxplot of Categories by Transaction",
             xlab = "Categories",
             ylab = "Transaction Amount in Dollars",
@@ -67,7 +94,14 @@ server <- function(input, output) {
   
   # Stacked Bar Plot
   output$stackedbar <- renderPlot({
-    ggplot(more_credit, aes(fill = Category, y = Transaction.Amount, x = Month)) + 
+    filtered_data_plot <- filtered_data()
+    
+    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
+      # Handle the case when the filtered data is empty or NULL
+      return(NULL)
+    }
+    
+    ggplot(filtered_data_plot, aes(fill = Category, y = Transaction.Amount, x = Month)) + 
       geom_bar(stat = 'identity') +
       labs(title = "Stacked Bar Plot of Categories by Month",
            x = "Month",
@@ -76,7 +110,14 @@ server <- function(input, output) {
   
   # Pie Chart
   output$piechart <- renderPlot({
-    gender_counts <- table(more_credit$Gender)
+    filtered_data_plot <- filtered_data()
+    
+    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
+      # Handle the case when the filtered data is empty or NULL
+      return(NULL)
+    }
+    
+    gender_counts <- table(filtered_data_plot$Gender)
     colors <- c("green", "pink", "skyblue")
     pie(gender_counts,
         main = "Pie Chart of Gender Distribution",
@@ -92,7 +133,14 @@ server <- function(input, output) {
   
   # Scatter Plot
   output$scatterplot <- renderPlot({
-    ggplot(more_credit, aes(x = Age, y = Transaction.Amount)) +
+    filtered_data_plot <- filtered_data()
+    
+    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
+      # Handle the case when the filtered data is empty or NULL
+      return(NULL)
+    }
+    
+    ggplot(filtered_data_plot, aes(x = Age, y = Transaction.Amount)) +
       geom_point() +
       labs(title = "Scatter Plot of Transaction Amount vs. Age",
            x = "Age",
@@ -101,7 +149,14 @@ server <- function(input, output) {
   
   # Bar Plot
   output$barplot <- renderPlot({
-    ggplot(more_credit, aes(x = Category, y = Transaction_Category_Count / 1000, fill = Transaction_Category_Count)) +
+    filtered_data_plot <- filtered_data()
+    
+    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
+      # Handle the case when the filtered data is empty or NULL
+      return(NULL)
+    }
+    
+    ggplot(filtered_data_plot, aes(x = Category, y = Transaction_Category_Count / 1000, fill = Transaction_Category_Count)) +
       geom_bar(stat = "identity") +
       labs(title = "Bar Plot of Transaction Category Count",
            x = "Transaction Category",
