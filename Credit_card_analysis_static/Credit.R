@@ -4,7 +4,7 @@ library(ggplot2) # Static visualization library
 library(lubridate)      # Datetime library
 
 # Imports the data from a csv file
-credit <- read.csv("~/R_credit/credit-card-transaction/credit_card_transaction_flow.csv")
+credit <- read.csv("~/Documents/R_3.1Project/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv")
 
 more_credit <- credit %>%
   select(Customer.ID, Birthdate, Date, Transaction.Amount, Category, Gender, Name, Surname, Merchant.Name) %>%
@@ -53,6 +53,7 @@ geom_bar(stat='identity')
 gender_counts <- table(more_credit$Gender)
 colors <- c("green", "pink","skyblue")
 
+#pie chart 
 pie(gender_counts,
     main = "Pie Chart of Gender Distribution",
     labels = c("Not specified", "Female", "Male"),
@@ -64,10 +65,19 @@ pie(gender_counts,
     angle = 60
 )
 
-ggplot(more_credit, aes(x = paste(Year, Month, sep = "-"), group = 1)) +
-  geom_line(stat = "count", aes(y = after_stat(count), color = "blue")) +
-  scale_x_discrete(labels = scales::date_format("%Y-%m")) +
-  labs(title = "Line Plot of Transaction Frequency Over Time",
-       x = "Month and Year",
-       y = "Transaction Frequency") +
-  theme_minimal()
+# Scatter plot
+ggplot(more_credit, aes(x = Age, y = Transaction.Amount)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Transaction Amount vs. Age",
+       x = "Age",
+       y = "Transaction Amount")
+
+
+#Bar plot
+ggplot(more_credit, aes(x = Category, y = Transaction_Category_Count /1000, fill = Transaction_Category_Count)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Bar Plot of Transaction Category Count",
+       x = "Transaction Category",
+       y = "Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
