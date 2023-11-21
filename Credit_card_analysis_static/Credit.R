@@ -46,7 +46,7 @@ boxplot(more_credit$Transaction.Amount ~ more_credit$Category,
 
 # Creating a Stacked bar plot for category analysis
 ggplot(more_credit, aes(fill=Category, y=Transaction.Amount, x=Month)) + 
-geom_bar(stat='identity')
+  geom_bar(stat='identity')
 
 
 # Create a pie chart on Gender
@@ -80,4 +80,3 @@ ggplot(more_credit, aes(x = Category, y = Transaction_Category_Count /1000, fill
        x = "Transaction Category",
        y = "Count") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
