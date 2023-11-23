@@ -5,7 +5,7 @@ library(ggplot2)
 library(lubridate)
 
 # Imports the data from a csv file
-credit <- read.csv("~/Documents/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
+credit <- read.csv("~/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
 
 # Convert the 'Date' column to Date object
 credit$Date <- as.Date(credit$Date)
@@ -29,7 +29,12 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       selectInput("categoryFilter", "Select Category", choices = c("All", unique(more_credit$Category))),
-    ),
+   sliderInput(inputId = "bins",
+               min = 1,
+               label="Number of bins in the histogram:",
+               max = 50,
+               value = 30) 
+   ),
     mainPanel(
       plotOutput("histogram"),
       plotOutput("boxplot"),
@@ -38,6 +43,7 @@ ui <- fluidPage(
       plotOutput("scatterplot"),
       plotOutput("barplot")
     )
+    
   )
 )
 
@@ -55,7 +61,7 @@ server <- function(input, output) {
     return(filtered_data)
   })
   
-  # Histogram
+  # Histogram plotted by category
   output$histogram <- renderPlot({
     filtered_data_plot <- filtered_data()
     
@@ -64,13 +70,18 @@ server <- function(input, output) {
       return(NULL)
     }
     
-    hist(filtered_data_plot$Transaction.Amount,
+    x <- filtered_data_plot$Transaction.Amount
+    bins <- seq(min(x), max(x), length.out = input$bins + 2)
+    print(input$bins)
+    
+    hist(x,
+         breaks = bins,
          main = "Histogram on Transaction Amount",
          xlab = "Transaction Amount in Dollars",
          ylab = "Frequency",
          col = "blue",
          border = "black",
-         breaks = 12
+         
     )
   })
   
@@ -166,4 +177,4 @@ server <- function(input, output) {
 }
 
 # Run the Shiny app
-shinyApp(ui, server)
+shinyApp(ui = ui, server = server)
