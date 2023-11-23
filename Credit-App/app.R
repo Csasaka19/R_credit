@@ -25,17 +25,19 @@ more_credit <- credit %>%
 
 # Define UI
 ui <- fluidPage(
-  titlePanel("Credit Card Analysis Dashboard"),
+  titlePanel("Credit Card Transactions Analysis Dashboard"),
   sidebarLayout(
-    sidebarPanel(
+    sidebarPanel(h1("SideBar"),
       selectInput("categoryFilter", "Select Category", choices = c("All", unique(more_credit$Category))),
-   sliderInput(inputId = "bins",
-               min = 1,
-               label="Number of bins in the histogram:",
-               max = 50,
-               value = 30) 
+      # Adds default slider values to be used in the histogram
+      sliderInput(inputId = "bins",
+                min = 1,
+                label="Number of bins in the histogram:",
+                max = 50,
+                value = 30) 
    ),
     mainPanel(
+      h1("Credit Main Panel"),
       plotOutput("histogram"),
       plotOutput("boxplot"),
       plotOutput("stackedbar"),
