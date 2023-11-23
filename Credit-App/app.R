@@ -5,7 +5,7 @@ library(ggplot2)
 library(lubridate)
 
 # Imports the data from a csv file
-credit <- read.csv("~/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
+credit <- read.csv("C:/Users/MissD/Documents/R_Project_311/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
 
 # Convert the 'Date' column to Date object
 credit$Date <- as.Date(credit$Date)
@@ -178,3 +178,5 @@ server <- function(input, output) {
 
 # Run the Shiny app
 shinyApp(ui = ui, server = server)
+
+#I'm a contributor
