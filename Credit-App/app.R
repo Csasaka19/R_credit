@@ -5,7 +5,7 @@ library(ggplot2)
 library(lubridate)
 
 # Imports the data from a csv file
-credit <- read.csv("C:/Users/MissD/Documents/R_Project_311/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
+credit <- read.csv("~/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
 
 # Convert the 'Date' column to Date object
 credit$Date <- as.Date(credit$Date)
@@ -69,7 +69,8 @@ ui <- fluidPage(
       plotOutput("stackedbar"),
       plotOutput("piechart"),
       plotOutput("scatterplot"),
-      plotOutput("barplot")
+      plotOutput("barplot"),
+      plotOutput("heatmap")
     )
     
   )
@@ -194,7 +195,6 @@ server <- function(input, output) {
       # Handle the case when the filtered data is empty or NULL
       return(NULL)
     }
-    
     ggplot(filtered_data_plot, aes(x = Category, y = Transaction_Category_Count / 1000, fill = Transaction_Category_Count)) +
       geom_bar(stat = "identity") +
       labs(title = "Bar Plot of Transaction Category Count",
@@ -202,6 +202,31 @@ server <- function(input, output) {
            y = "Count") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
+
+  # Heatmap
+    output$heatmap <- renderPlot({
+      filtered_data_plot <- filtered_data()
+      
+      if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
+        # Handle the case when the filtered data is empty or NULL
+        return(NULL)
+      }
+      
+      # Update heatmap data based on the selected category
+      heatmap_data <- table(filtered_data_plot$Age, filtered_data_plot$Category)
+      
+      # Create heatmap
+      heatmap(
+        heatmap_data,
+        Colv = NULL,  # Turn off column clustering
+        Rowv = NULL,  # Turn off row clustering
+        col = c("orange", "light blue"),  # Use a color palette
+        scale = "none",  # Corrected scale argument
+        xlab = "Category",
+        ylab = "Age",
+        main = "Heatmap with Age and Categories"
+      )
+    })
 }
 
 # Run the Shiny app
