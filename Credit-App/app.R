@@ -1,8 +1,8 @@
 # Relevant libraries
 library(shiny)
 library(dplyr)
-library(ggplot2)
 library(lubridate)
+library(plotly)
 
 # Imports the data from a csv file
 credit <- read.csv("~/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
@@ -23,56 +23,71 @@ more_credit <- credit %>%
     Transaction_Category_Count = ave(Transaction.Amount, Category, FUN = length)
   )
 
-#This is for the heatmap, so we decided to preprocess the data
-# Convert Gender and Category columns to factors
-more_credit$Category <- as.factor(more_credit$Category)
-
-# Create a contingency table (matrix)
-heatmap_data <- table( more_credit$Age,more_credit$Category)
-
 # Define UI
-ui <- fluidPage(
-  titlePanel("Credit Card Transactions Analysis Dashboard"),
-  sidebarLayout(
-    sidebarPanel(h1("SideBar"),
-      selectInput("categoryFilter", "Select Category", choices = c("All", unique(more_credit$Category))),
-      # Adds default slider values to be used in the histogram
-      sliderInput(inputId = "bins",
-                min = 1,
-                label="Number of bins in the histogram:",
-                max = 50,
-                value = 30),
-      
-      dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
-      img(src = "Credit.png", height = 100, width = 100)
-   ),
-    mainPanel(
-      h1("Credit Main Panel"),
-      h3("Features"),
-      h5(strong("Customer ID: "),"Unique identifiers for every customer"),
-      h5(strong("Name: "),"First name of the customer."),
-      h5(strong("Surname: "),"Last name of the customer."),
-      h5(strong("Gender: "),"The gender of the customer."),
-      h5(strong("Birthdate: "),"Date of birth for each customer."),
-      h5(strong("Transaction Amount: "),"The dollar amount for each transaction."),
-      h5(strong("Date: "),"Date when the transaction occurred."),
-      h5(strong("Merchant Name: "),"The name of the merchant where the transaction took place."),
-      h5(strong("Category: "),"Categorization of the transaction."),
-      h3("Why Analyze?"),
-      h5("1.Insight into Customer Behavior: Analyzing transaction frequency, amount, and categories provides insights into customer behavior and preferences."),
-      h5("2.Temporal Trends: Analyzing transactions over time helps identify temporal trends, seasonality, or patterns valuable for understanding customer behavior."),
-      h5("3.Identifying Outliers: Plots like boxplots and histograms aid in identifying outliers in transaction amounts, allowing for further investigation."),
-      h5("4.Demographic Analysis: Age and gender analysis helps understand the demographics of customers and their spending patterns."),
-      h5("5.Category Insights: Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers."),
-      plotOutput("histogram"),
-      plotOutput("boxplot"),
-      plotOutput("stackedbar"),
-      plotOutput("piechart"),
-      plotOutput("scatterplot"),
-      plotOutput("barplot"),
-      plotOutput("heatmap")
+ui <- navbarPage(
+  title = "Credit Card Transactions Analysis Dashboard",
+  
+  tabPanel(
+    "Plots",
+    sidebarLayout(
+      sidebarPanel(
+        h1("SideBar"),
+        br(),
+        img(src = "credit2.jpg", height = 250, width = 400),
+        br(),
+        br(),
+        dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
+        br(),
+        checkboxGroupInput("categoryFilter", "Select Category:", choices = c("All", unique(more_credit$Category))),
+        sliderInput(inputId = "amountFilter", label = "Filter by Transaction Amount:", min = 0, max = max(more_credit$Transaction.Amount), value = c(0, max(more_credit$Transaction.Amount)))
+      ),
+      mainPanel(
+        h1("Credit Main Panel"),
+        h3("Features"),
+        h5(strong("Customer ID: "),"Unique identifiers for every customer"),
+        h5(strong("Name: "),"First name of the customer."),
+        h5(strong("Surname: "),"Last name of the customer."),
+        h5(strong("Gender: "),"The gender of the customer."),
+        h5(strong("Birthdate: "),"Date of birth for each customer."),
+        h5(strong("Transaction Amount: "),"The dollar amount for each transaction."),
+        h5(strong("Date: "),"Date when the transaction occurred."),
+        h5(strong("Merchant Name: "),"The name of the merchant where the transaction took place."),
+        h5(strong("Category: "),"Categorization of the transaction."),
+        h3("Why Analyze?"),
+        h5("1.Insight into Customer Behavior: Analyzing transaction frequency, amount, and categories provides insights into customer behavior and preferences."),
+        h5("2.Temporal Trends: Analyzing transactions over time helps identify temporal trends, seasonality, or patterns valuable for understanding customer behavior."),
+        h5("3.Identifying Outliers: Plots like boxplots and histograms aid in identifying outliers in transaction amounts, allowing for further investigation."),
+        h5("4.Demographic Analysis: Age and gender analysis helps understand the demographics of customers and their spending patterns."),
+        h5("5.Category Insights: Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers."),
+        tabsetPanel(
+          tabPanel("Histogram", plotlyOutput("histogram")),
+          tabPanel("Boxplot", plotlyOutput("boxplot")),
+          tabPanel("Stacked Bar Plot", plotlyOutput("stackedbar")),
+          tabPanel("Pie Chart", plotlyOutput("piechart")),
+          tabPanel("Scatter Plot", plotlyOutput("scatterplot")),
+          tabPanel("Bar Plot", plotlyOutput("barplot")),
+          tabPanel("Heatmap", plotlyOutput("heatmap"))
+        )
+      )
     )
-    
+  ),
+  
+  tabPanel(
+    "Additional Options",
+    sidebarLayout(
+      sidebarPanel(
+        h1("Additional Options"),
+        br(),
+        checkboxInput("showDetails", "Show Customer Details", value = FALSE)
+      ),
+      mainPanel(
+        h1("Customer Details"),
+        conditionalPanel(
+          condition = "input.showDetails",
+          dataTableOutput("customerTable")
+        )
+      )
+    )
   )
 )
 
@@ -84,14 +99,18 @@ server <- function(input, output) {
     filtered_data <- more_credit
     
     if (input$categoryFilter != "All") {
-      filtered_data <- filtered_data %>% filter(Category == input$categoryFilter)
+      filtered_data <- filtered_data %>% filter(Category %in% input$categoryFilter)
     }
+    
+    filtered_data <- filtered_data %>% filter(Transaction.Amount >= input$amountFilter[1] & Transaction.Amount <= input$amountFilter[2])
+    
+    filtered_data <- filtered_data %>% filter(Date >= input$dateRange[1] & Date <= input$dateRange[2])
     
     return(filtered_data)
   })
   
   # Histogram plotted by category
-  output$histogram <- renderPlot({
+  output$histogram <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
     if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
@@ -99,23 +118,15 @@ server <- function(input, output) {
       return(NULL)
     }
     
-    x <- filtered_data_plot$Transaction.Amount
-    bins <- seq(min(x), max(x), length.out = input$bins + 2)
-    print(input$bins)
-    
-    hist(x,
-         breaks = bins,
-         main = "Histogram on Transaction Amount",
-         xlab = "Transaction Amount in Dollars",
-         ylab = "Frequency",
-         col = "blue",
-         border = "black",
-         
-    )
+    plot_ly(filtered_data_plot, x = ~Transaction.Amount, type = "histogram", color = ~Category) %>%
+      layout(title = "Histogram on Transaction Amount",
+             xaxis = list(title = "Transaction Amount in Dollars"),
+             yaxis = list(title = "Frequency"),
+             barmode = "stack")
   })
   
   # Boxplot
-  output$boxplot <- renderPlot({
+  output$boxplot <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
     if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
@@ -123,17 +134,14 @@ server <- function(input, output) {
       return(NULL)
     }
     
-    boxplot(filtered_data_plot$Transaction.Amount ~ filtered_data_plot$Category,
-            main = "Boxplot of Categories by Transaction",
-            xlab = "Categories",
-            ylab = "Transaction Amount in Dollars",
-            border = "black",
-            col = "grey"
-    )
+    plot_ly(filtered_data_plot, x = ~Category, y = ~Transaction.Amount, type = "box") %>%
+      layout(title = "Boxplot of Categories by Transaction",
+             xaxis = list(title = "Categories"),
+             yaxis = list(title = "Transaction Amount in Dollars"))
   })
   
   # Stacked Bar Plot
-  output$stackedbar <- renderPlot({
+  output$stackedbar <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
     if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
@@ -141,15 +149,14 @@ server <- function(input, output) {
       return(NULL)
     }
     
-    ggplot(filtered_data_plot, aes(fill = Category, y = Transaction.Amount, x = Month)) + 
-      geom_bar(stat = 'identity') +
-      labs(title = "Stacked Bar Plot of Categories by Month",
-           x = "Month",
-           y = "Transaction Amount")
+    plot_ly(filtered_data_plot, x = ~Month, y = ~Transaction.Amount, color = ~Category, type = "bar") %>%
+      layout(title = "Stacked Bar Plot of Categories by Month",
+             xaxis = list(title = "Month"),
+             yaxis = list(title = "Transaction Amount"))
   })
   
   # Pie Chart
-  output$piechart <- renderPlot({
+  output$piechart <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
     if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
@@ -159,20 +166,13 @@ server <- function(input, output) {
     
     gender_counts <- table(filtered_data_plot$Gender)
     colors <- c("green", "pink", "skyblue")
-    pie(gender_counts,
-        main = "Pie Chart of Gender Distribution",
-        labels = c("Not specified", "Female", "Male"),
-        edges = 400,
-        radius = 0.8,
-        col = colors,
-        border = "black",
-        clockwise = TRUE,
-        angle = 60
-    )
+    
+    plot_ly(labels = c("Not specified", "Female", "Male"), values = gender_counts, type = "pie", marker = list(colors = colors)) %>%
+      layout(title = "Pie Chart of Gender Distribution")
   })
   
   # Scatter Plot
-  output$scatterplot <- renderPlot({
+  output$scatterplot <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
     if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
@@ -180,56 +180,57 @@ server <- function(input, output) {
       return(NULL)
     }
     
-    ggplot(filtered_data_plot, aes(x = Age, y = Transaction.Amount)) +
-      geom_point() +
-      labs(title = "Scatter Plot of Transaction Amount vs. Age",
-           x = "Age",
-           y = "Transaction Amount")
+    plot_ly(filtered_data_plot, x = ~Age, y = ~Transaction.Amount, type = "scatter", mode = "markers") %>%
+      layout(title = "Scatter Plot of Transaction Amount vs. Age",
+             xaxis = list(title = "Age"),
+             yaxis = list(title = "Transaction Amount"))
   })
   
   # Bar Plot
-  output$barplot <- renderPlot({
+  output$barplot <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
     if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
       # Handle the case when the filtered data is empty or NULL
       return(NULL)
     }
-    ggplot(filtered_data_plot, aes(x = Category, y = Transaction_Category_Count / 1000, fill = Transaction_Category_Count)) +
-      geom_bar(stat = "identity") +
-      labs(title = "Bar Plot of Transaction Category Count",
-           x = "Transaction Category",
-           y = "Count") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    
+    plot_ly(filtered_data_plot, x = ~Category, y = ~Transaction_Category_Count / 1000, type = "bar", marker = list(color = ~Transaction_Category_Count)) %>%
+      layout(title = "Bar Plot of Transaction Category Count",
+             xaxis = list(title = "Transaction Category"),
+             yaxis = list(title = "Count"),
+             xaxis = list(tickangle = 45))
   })
 
   # Heatmap
-    output$heatmap <- renderPlot({
-      filtered_data_plot <- filtered_data()
-      
-      if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-        # Handle the case when the filtered data is empty or NULL
-        return(NULL)
-      }
-      
-      # Update heatmap data based on the selected category
-      heatmap_data <- table(filtered_data_plot$Age, filtered_data_plot$Category)
-      
-      # Create heatmap
-      heatmap(
-        heatmap_data,
-        Colv = NULL,  # Turn off column clustering
-        Rowv = NULL,  # Turn off row clustering
-        col = c("orange", "light blue"),  # Use a color palette
-        scale = "none",  # Corrected scale argument
-        xlab = "Category",
-        ylab = "Age",
-        main = "Heatmap with Age and Categories"
-      )
-    })
+  output$heatmap <- renderPlotly({
+    filtered_data_plot <- filtered_data()
+    
+    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
+      # Handle the case when the filtered data is empty or NULL
+      return(NULL)
+    }
+    
+    heatmap_data <- table(filtered_data_plot$Age, filtered_data_plot$Category)
+    
+    plot_ly(z = heatmap_data, x = levels(filtered_data_plot$Category), y = levels(filtered_data_plot$Age), type = "heatmap") %>%
+      layout(title = "Heatmap with Age and Categories",
+             xaxis = list(title = "Category"),
+             yaxis = list(title = "Age"))
+  })
+  
+  # Customer Details Table
+  output$customerTable <- renderDataTable({
+    filtered_data_plot <- filtered_data()
+    
+    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
+      # Handle the case when the filtered data is empty or NULL
+      return(NULL)
+    }
+    
+    filtered_data_plot %>% select(Customer.ID, Name, Surname, Gender, Birthdate, Transaction.Amount, Date, Merchant.Name, Category)
+  })
 }
 
 # Run the Shiny app
 shinyApp(ui = ui, server = server)
-
-#I'm a contributor
