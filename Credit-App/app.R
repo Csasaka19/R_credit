@@ -5,7 +5,7 @@ library(ggplot2)
 library(lubridate)
 
 # Imports the data from a csv file
-credit <- read.csv("~/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
+credit <- read.csv("C:/Users/MissD/Documents/R_Project_311/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
 
 # Convert the 'Date' column to Date object
 credit$Date <- as.Date(credit$Date)
@@ -22,6 +22,13 @@ more_credit <- credit %>%
     Transaction_Frequency = ave(Transaction.Amount, Customer.ID, FUN = length),
     Transaction_Category_Count = ave(Transaction.Amount, Category, FUN = length)
   )
+
+#This is for the heatmap, so we decided to preprocess the data
+# Convert Gender and Category columns to factors
+more_credit$Category <- as.factor(more_credit$Category)
+
+# Create a contingency table (matrix)
+heatmap_data <- table( more_credit$Age,more_credit$Category)
 
 # Define UI
 ui <- fluidPage(

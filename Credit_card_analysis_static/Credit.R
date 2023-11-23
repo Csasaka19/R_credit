@@ -4,7 +4,7 @@ library(ggplot2) # Static visualization library
 library(lubridate)      # Datetime library
 
 # Imports the data from a csv file
-credit <- read.csv("~/Documents/R_3.1Project/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv")
+credit <- read.csv("C:/Users/MissD/Documents/R_Project_311/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv")
 
 more_credit <- credit %>%
   select(Customer.ID, Birthdate, Date, Transaction.Amount, Category, Gender, Name, Surname, Merchant.Name) %>%
@@ -80,3 +80,21 @@ ggplot(more_credit, aes(x = Category, y = Transaction_Category_Count /1000, fill
        x = "Transaction Category",
        y = "Count") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#This is for the heatmap, so we decided to preprocess the data
+# Convert Gender and Category columns to factors
+more_credit$Category <- as.factor(more_credit$Category)
+
+# Create a contingency table (matrix)
+heatmap_data <- table( more_credit$Age,more_credit$Category)
+# Create heatmap
+heatmap(
+  heatmap_data,
+  Colv = NULL,  # Turn off column clustering
+  Rowv = NULL,  # Turn off row clustering
+  col = c("orange","light blue"),  # Use a color palette
+  scale = "none",  # Corrected scale argument
+  xlab = "Category",
+  ylab = "Age",
+  main = "Heatmap with Age and Categories"
+)
