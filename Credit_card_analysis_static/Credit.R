@@ -4,7 +4,11 @@ library(ggplot2) # Static visualization library
 library(lubridate)      # Datetime library
 
 # Imports the data from a csv file
+<<<<<<< Updated upstream
 credit <- read.csv("C:/Users/MissD/Documents/R_Project_311/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv")
+=======
+credit <- read.csv("~/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv")
+>>>>>>> Stashed changes
 
 more_credit <- credit %>%
   select(Customer.ID, Birthdate, Date, Transaction.Amount, Category, Gender, Name, Surname, Merchant.Name) %>%

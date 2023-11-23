@@ -44,8 +44,7 @@ ui <- fluidPage(
                 value = 30),
       
       dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
-      
-      img(src = "~/R_credit/Credit-App/credit_card.png", height = 100, width = 100)
+      img(src = "Credit.png", height = 100, width = 100)
    ),
     mainPanel(
       h1("Credit Main Panel"),
