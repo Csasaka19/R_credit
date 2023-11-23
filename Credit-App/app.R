@@ -5,7 +5,7 @@ library(ggplot2)
 library(lubridate)
 
 # Imports the data from a csv file
-credit <- read.csv("C:/Users/MissD/Documents/R_Project_311/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
+credit <- read.csv("~/R_credit/Credit_card_analysis_static/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
 
 # Convert the 'Date' column to Date object
 credit$Date <- as.Date(credit$Date)
@@ -38,6 +38,22 @@ ui <- fluidPage(
    ),
     mainPanel(
       h1("Credit Main Panel"),
+      h3("Features"),
+      h5(strong("Customer ID: "),"Unique identifiers for every customer"),
+      h5(strong("Name: "),"First name of the customer."),
+      h5(strong("Surname: "),"Last name of the customer."),
+      h5(strong("Gender: "),"The gender of the customer."),
+      h5(strong("Birthdate: "),"Date of birth for each customer."),
+      h5(strong("Transaction Amount: "),"The dollar amount for each transaction."),
+      h5(strong("Date: "),"Date when the transaction occurred."),
+      h5(strong("Merchant Name: "),"The name of the merchant where the transaction took place."),
+      h5(strong("Category: "),"Categorization of the transaction."),
+      h3("Why Analyze?"),
+      h5("1.Insight into Customer Behavior: Analyzing transaction frequency, amount, and categories provides insights into customer behavior and preferences."),
+      h5("2.Temporal Trends: Analyzing transactions over time helps identify temporal trends, seasonality, or patterns valuable for understanding customer behavior."),
+      h5("3.Identifying Outliers: Plots like boxplots and histograms aid in identifying outliers in transaction amounts, allowing for further investigation."),
+      h5("4.Demographic Analysis: Age and gender analysis helps understand the demographics of customers and their spending patterns."),
+      h5("5.Category Insights: Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers."),
       plotOutput("histogram"),
       plotOutput("boxplot"),
       plotOutput("stackedbar"),
