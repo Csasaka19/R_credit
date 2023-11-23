@@ -23,6 +23,13 @@ more_credit <- credit %>%
     Transaction_Category_Count = ave(Transaction.Amount, Category, FUN = length)
   )
 
+#This is for the heatmap, so we decided to preprocess the data
+# Convert Gender and Category columns to factors
+more_credit$Category <- as.factor(more_credit$Category)
+
+# Create a contingency table (matrix)
+heatmap_data <- table( more_credit$Age,more_credit$Category)
+
 # Define UI
 ui <- fluidPage(
   titlePanel("Credit Card Transactions Analysis Dashboard"),
@@ -37,8 +44,7 @@ ui <- fluidPage(
                 value = 30),
       
       dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
-      
-      img(src = "~/R_credit/Credit-App/credit_card.png", height = 100, width = 100)
+      img(src = "Credit.png", height = 100, width = 100)
    ),
     mainPanel(
       h1("Credit Main Panel"),
@@ -63,7 +69,8 @@ ui <- fluidPage(
       plotOutput("stackedbar"),
       plotOutput("piechart"),
       plotOutput("scatterplot"),
-      plotOutput("barplot")
+      plotOutput("barplot"),
+      plotOutput("heatmap")
     )
     
   )
@@ -188,7 +195,6 @@ server <- function(input, output) {
       # Handle the case when the filtered data is empty or NULL
       return(NULL)
     }
-    
     ggplot(filtered_data_plot, aes(x = Category, y = Transaction_Category_Count / 1000, fill = Transaction_Category_Count)) +
       geom_bar(stat = "identity") +
       labs(title = "Bar Plot of Transaction Category Count",
@@ -196,6 +202,31 @@ server <- function(input, output) {
            y = "Count") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1))
   })
+
+  # Heatmap
+    output$heatmap <- renderPlot({
+      filtered_data_plot <- filtered_data()
+      
+      if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
+        # Handle the case when the filtered data is empty or NULL
+        return(NULL)
+      }
+      
+      # Update heatmap data based on the selected category
+      heatmap_data <- table(filtered_data_plot$Age, filtered_data_plot$Category)
+      
+      # Create heatmap
+      heatmap(
+        heatmap_data,
+        Colv = NULL,  # Turn off column clustering
+        Rowv = NULL,  # Turn off row clustering
+        col = c("orange", "light blue"),  # Use a color palette
+        scale = "none",  # Corrected scale argument
+        xlab = "Category",
+        ylab = "Age",
+        main = "Heatmap with Age and Categories"
+      )
+    })
 }
 
 # Run the Shiny app
