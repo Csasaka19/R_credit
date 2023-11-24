@@ -39,7 +39,7 @@ ui <- navbarPage(
       sidebarPanel(
         h1("SideBar"),
         br(),
-        img(src = "credit2.jpg", height = 250, width = 400),
+        img(src = "credit2.jpg", height = 200, width = 200),
         br(),
         br(),
         dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
@@ -207,7 +207,7 @@ server <- function(input, output) {
              yaxis = list(title = "Count"),
              xaxis = list(tickangle = 45))
   })
-
+  
   # Heatmap
   output$heatmap <- renderPlotly({
     filtered_data_plot <- filtered_data()
