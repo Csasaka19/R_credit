@@ -27,7 +27,7 @@ more_credit <- credit %>%
 heatmap_data <- table(more_credit$Age, more_credit$Category)
 
 # Convert more_credit$Category to a factor
-more_credit$Category <- as.factor(more_credit$Category)
+more_credit$Category <- as.character(more_credit$Category)
 
 # Define UI
 ui <- navbarPage(
@@ -44,7 +44,7 @@ ui <- navbarPage(
         br(),
         dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
         br(),
-        checkboxGroupInput("categoryFilter", "Select Category:", choices = c("All", unique(more_credit$Category))),
+        selectInput("categoryFilter", "Select Category: ", choices = c("All", unique(more_credit$Category))),
         sliderInput(inputId = "amountFilter", label = "Filter by Transaction Amount:", min = 0, max = max(more_credit$Transaction.Amount), value = c(0, max(more_credit$Transaction.Amount)))
       ),
       mainPanel(
@@ -108,9 +108,9 @@ server <- function(input, output) {
       filtered_data <- filtered_data %>% filter(Category %in% input$categoryFilter)
     }
     
-    filtered_data <- filtered_data %>% filter(Transaction.Amount >= input$amountFilter[1] & Transaction.Amount <= input$amountFilter[2])
+    #filtered_data <- filtered_data %>% filter(Transaction.Amount >= input$amountFilter[1] & Transaction.Amount <= input$amountFilter[2])
     
-    filtered_data <- filtered_data %>% filter(Date >= input$dateRange[1] & Date <= input$dateRange[2])
+    #filtered_data <- filtered_data %>% filter(Date >= input$dateRange[1] & Date <= input$dateRange[2])
     
     return(filtered_data)
   })
