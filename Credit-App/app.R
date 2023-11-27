@@ -23,7 +23,7 @@ more_credit <- credit %>%
     Transaction_Category_Count = ave(Transaction.Amount, Category, FUN = length)
   )
 
-# New table for the the heatmap
+# New table for the heatmap
 heatmap_data <- table(more_credit$Age, more_credit$Category)
 
 # Convert more_credit$Category to a factor
@@ -44,8 +44,12 @@ ui <- navbarPage(
         br(),
         dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
         br(),
+
         selectInput("categoryFilter", "Select Category: ", choices = c("All", unique(more_credit$Category))),
+        sliderInput(inputId = "amountFilter", label = "Filter by Transaction Amount:", min = 0, max = max(more_credit$Transaction.Amount), value = c(0, max(more_credit$Transaction.Amount))),
+        checkboxGroupInput("categoryFilter", "Select Category:", choices = c("All", unique(more_credit$Category))),
         sliderInput(inputId = "amountFilter", label = "Filter by Transaction Amount:", min = 0, max = max(more_credit$Transaction.Amount), value = c(0, max(more_credit$Transaction.Amount)))
+
       ),
       mainPanel(
         h1("Credit Main Panel"),
@@ -67,7 +71,7 @@ ui <- navbarPage(
         h5("5.Category Insights: Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers."),
         tabsetPanel(
           tabPanel("Histogram", plotlyOutput("histogram")),
-          tabPanel("Boxplot", plotlyOutput("boxplot")),
+          tabPanel("Boxplot", plotlyOutput("boxplot2")),
           tabPanel("Stacked Bar Plot", plotlyOutput("stackedbar")),
           tabPanel("Pie Chart", plotlyOutput("piechart")),
           tabPanel("Scatter Plot", plotlyOutput("scatterplot")),
@@ -119,8 +123,8 @@ server <- function(input, output) {
   output$histogram <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -132,26 +136,26 @@ server <- function(input, output) {
   })
   
   # Boxplot
-  output$boxplot <- renderPlotly({
+  output$boxplot2 <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
-    plot_ly(filtered_data_plot, x = ~Category, y = ~Transaction.Amount, type = "box") %>%
-      layout(title = "Boxplot of Categories by Transaction",
-             xaxis = list(title = "Categories"),
-             yaxis = list(title = "Transaction Amount in Dollars"))
+    plot_ly(filtered_data_plot, x = ~Transaction.Amount, color = ~Category, type = "box") %>%
+      layout(title = "Box Plot on Transaction Amount",
+             xaxis = list(title = "Transaction Amount in Dollars"),
+             yaxis = list(title = "Category"))
   })
   
   # Stacked Bar Plot
   output$stackedbar <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -165,8 +169,8 @@ server <- function(input, output) {
   output$piechart <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -181,8 +185,8 @@ server <- function(input, output) {
   output$scatterplot <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -196,8 +200,8 @@ server <- function(input, output) {
   output$barplot <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -212,8 +216,8 @@ server <- function(input, output) {
   output$heatmap <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -229,8 +233,8 @@ server <- function(input, output) {
   output$customerTable <- renderDataTable({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
