@@ -47,9 +47,6 @@ ui <- navbarPage(
 
         selectInput("categoryFilter", "Select Category: ", choices = c("All", unique(more_credit$Category))),
         sliderInput(inputId = "amountFilter", label = "Filter by Transaction Amount:", min = 0, max = max(more_credit$Transaction.Amount), value = c(0, max(more_credit$Transaction.Amount))),
-        checkboxGroupInput("categoryFilter", "Select Category:", choices = c("All", unique(more_credit$Category))),
-        sliderInput(inputId = "amountFilter", label = "Filter by Transaction Amount:", min = 0, max = max(more_credit$Transaction.Amount), value = c(0, max(more_credit$Transaction.Amount)))
-
       ),
       mainPanel(
         h1("Credit Main Panel"),
