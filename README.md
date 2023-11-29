@@ -37,6 +37,8 @@ The dataset itself can be found from [here](https://www.kaggle.com/datasets/raja
 ## Structure of the Repository:
 
 This repository has two main directories for the project:
+
+
 **1. Credit_card_analysis_static**
 This directory contains the static analysis of the data where we added some relevant columns for analysis and proper conclusions to be drawn from the dataset.
 The R ggplot library is used for plotting in this directory.
