@@ -5,7 +5,7 @@ library(lubridate)
 library(plotly)
 
 # Imports the data from a csv file
-credit <- read.csv("~/R_credit/Credit-App/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
+credit <- read.csv("~/Documents/R_3.1Project/R_credit/Credit-App/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
 
 # Convert the 'Date' column to Date object
 credit$Date <- as.Date(credit$Date)
@@ -141,10 +141,10 @@ server <- function(input, output) {
       return(NULL)
     }
     
-    plot_ly(filtered_data_plot, x = ~Transaction.Amount, color = ~Category, type = "box") %>%
+    plot_ly(filtered_data_plot, y = ~Transaction.Amount, color = ~Category, type = "box") %>%
       layout(title = "Box Plot on Transaction Amount",
-             xaxis = list(title = "Transaction Amount in Dollars"),
-             yaxis = list(title = "Category"))
+             xaxis = list(title = "Category"),
+             yaxis = list(title = "Transaction Amount in Dollars"))
   })
   
   # Stacked Bar Plot
