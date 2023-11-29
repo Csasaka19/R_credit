@@ -6,6 +6,7 @@ library(plotly)
 library(shinydashboard)
 library(shinycssloaders)
 
+
 # Imports the data from a csv file
 credit <- read.csv("~/R_credit/Credit-App/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
 
@@ -62,17 +63,13 @@ ui <- dashboardPage(
                 "About",
                 icon = icon("address-card"),
                 fluidRow(
-<<<<<<< HEAD
                   column(width = 8, tags$img(src = "credit-card.jpg", width = 600, height = 300), tags$a("Photo of a Credit Card", align = "left")),
-=======
-                    column(width = 8, tags$img(src = "credit-card.jpg", width = 600, height = 300)),
->>>>>>> a0129e3c318ff394e6e0960f34af11386f9d0a5a
                   tags$br(),
                   column(
                     width = 4,
                     tags$br(),
                     tags$h2("Description:"),
-                    tags$p("Welcome to the world of credit card transactions! This dataset provides a treasure trove of insights into customers' spending habits, transactions, and more. Whether you're a data scientist, analyst, or just someone curious about how money moves, this dataset is for you."),
+                    tags$p("Welcome to the world of credit card transactions! This dataset provides a treasure trove of insights into customers' spending habits, transactions, and more. Whether you're a data scientist, analyst, or just someone curious about how money moves,this is for you."),
                     tags$br(),
                     tags$p(tags$strong("Why this dataset matters:")),
                     tags$p("Understanding consumer spending patterns is crucial for businesses and financial institutions. This dataset is a goldmine for exploring trends, patterns, and anomalies in financial behavior. It can be used for fraud detection, marketing strategies, and much more.")

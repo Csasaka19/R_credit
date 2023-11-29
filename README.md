@@ -1,19 +1,24 @@
-# Credit Card Transaction Dataset
+# Credit Card Transaction Dataset Project
 
 ## Table of Contents
-- [Features](#features)
 - [Dataset Overview](#dataset-overview)
-- [Initial Cleaning and Analysis](#initial-cleaning-and-analysis)
-- [Plots](#plots)
-    - [Histogram of Transaction Amount](#histogram-of-transaction-amount)
-    - [Boxplot of Transaction Amount by Category](#boxplot-of-transaction-amount-by-category)
-    - [Line Plot of Transaction Frequency Over Time](#line-plot-of-transaction-frequency-over-time)
-    - [Stacked bar_plot of Category Transaction Amount](#stacked-bar-plot-of-transaction-amount-by-category)
-    - [Bar Plot of Transaction Category Count](#bar-plot-of-transaction-category-count)
-    - [Scatter Plot of Transaction Amount vs. Age](#scatter-plot-of-transaction-amount-vs-age)
-    - [Pie Chart of Gender Distribution](#pie-chart-of-gender-distribution)
-    - [Heatmap of Correlations](#heatmap-of-correlations)
+- [Features](#features)
+- [Structure of the Repository](#structure-of-the-repository)
+- [The App](#the-app)
+    - [Intro](#intro)
+    - [Data](#data)
+    - [Structure](#structure)
+    - [Summary](#summary)
+    - [Plots](#plots)
+    - [Customer Details](#customer-details)
 - [Why Analyze?](#why-analyze)
+
+## Dataset Overview:
+
+This dataset provides a treasure trove of insights into customers' spending habits, transactions, and more. Whether you're a data scientist, analyst, or just someone curious about how money moves, this dataset is for you.
+The dataset itself can be found from [here](https://www.kaggle.com/datasets/rajatsurana979/comprehensive-credit-card-transactions-dataset)
+
+
 
 ## Features:
 
@@ -27,69 +32,76 @@
 8. **Merchant Name:** The name of the merchant where the transaction took place.
 9. **Category:** Categorization of the transaction.
 
-## Dataset Overview:
 
-This dataset is valuable for analytics of various trends within the transaction world and can be particularly useful in fraud detection by isolating irregular transaction activities.
 
-## Initial Cleaning and Analysis:
+## Structure of the Repository:
 
-1. **Age of Credit Card Owners:** Calculate and analyze the age of credit card owners based on their birthdate.
+This repository has two main directories for the project:
+**1. Credit_card_analysis_static**
+This directory contains the static analysis of the data where we added some relevant columns for analysis and proper conclusions to be drawn from the dataset.
+The R ggplot library is used for plotting in this directory.
 
-2. **Frequency of Transactions:** Determine the frequency of transactions to understand how often customers engage in transactions.
 
-3. **Category Transaction Count:** Analyze the count of transactions within each category.
+**2. Credit:**
+This directory involved the conversion of the static previously worked on previously into an interactive web application using the Shiny web framework package available for R applications.
+The dynamic Plotly package was used to plot interactive plots for the application.
 
-4. **Month and Exact Dates of Transactions:** Extract month and exact dates of transactions (Year is constant - 2023).
 
-## Plots:
 
-### Histogram of Transaction Amount:
-- Visualize the distribution of transaction amounts using a histogram.
-- Identify the most common transaction amounts and detect outliers.
+## The App
+The shiny application application can be started by running the app.R script available in the Credit-App directory.
 
-### Boxplot of Transaction Amount by Category:
-- Compare the distribution of transaction amounts across different categories.
-- Identify categories with higher or lower transaction amounts.
 
-### Stacked Bar plot of Transaction Amount by Category:
-- The stacked bar plot shows the distinct category of items purchased by amount over a 12-month period.
-- This identifies categories with higher or lower transaction amounts.
 
-### Line Plot of Transaction Frequency Over Time:
-- Show how transaction frequency changes over time (using month and year).
-- Identify trends or seasonality in transaction frequency.
+### Intro
+The homepage introduction to the dataset and why it is useful.
+![Introduction](img/Intro.png)
 
-### Bar Plot of Transaction Category Count:
-- Display the count of transactions in each category.
-- Identify the most popular transaction categories.
 
-### Scatter Plot of Transaction Amount vs. Age:
-- Explore the relationship between transaction amount and customer age using a scatter plot.
-- Identify patterns or correlations between age and transaction amount.
 
-### Pie Chart of Gender Distribution:
-- Visualize the distribution of gender among customers using a pie chart.
-- Provide an overview of the gender distribution in the dataset.
+### Data
+Browse and discover several entries in the initial credit dataset.
+![Photo of Credit data](img/csv-data.png)
 
-### Heatmap of Correlations:
-- Create a heatmap to visualize correlations between numerical variables (e.g., transaction amount, age, transaction frequency).
-- Identify relationships between different variables.
+
+
+### Structure
+View the general structure of the the dataset.
+![Photo of the Structure](img/data-structure.png)
+
+
+
+### Summary
+View a summarized version of the the dataset.
+![Photo of the Summary](img/Summary.png)
+
+
+
+### Plots
+Explore the provided set of plots using different categories know form the dataset and years.
+![Photo of Plots](img/Browse-plots.png)
+
+
+
+### Customer Details
+See customer details of the adjusted dataset(more_credit) in detail.
+![Photo of a Customer Details](img/Customer_detals.png)
+
+
 
 ## Why Analyze?
 
-1. **Insight into Customer Behavior:**
+**1. Insight into Customer Behavior:**
    Analyzing transaction frequency, amount, and categories provides insights into customer behavior and preferences.
 
-2. **Temporal Trends:**
+**2. Temporal Trends:**
    Analyzing transactions over time helps identify temporal trends, seasonality, or patterns valuable for understanding customer behavior.
 
-3. **Identifying Outliers:**
+**3. Identifying Outliers:**
    Plots like boxplots and histograms aid in identifying outliers in transaction amounts, allowing for further investigation.
 
-4. **Demographic Analysis:**
+**4. Demographic Analysis:**
    Age and gender analysis helps understand the demographics of customers and their spending patterns.
 
-5. **Category Insights:**
+**5. Category Insights:**
    Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers.
-
-## Static analysis of this data was done in the Credit_card_analysis_static directory.
