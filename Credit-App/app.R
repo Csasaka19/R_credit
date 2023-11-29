@@ -7,7 +7,7 @@ library(shinydashboard)
 library(shinycssloaders)
 
 # Imports the data from a csv file
-credit <- read.csv("~/R_credit/Credit-App/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
+credit <- read.csv("~/Documents/R_3.1Project/R_credit/Credit-App/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
 
 # Convert the 'Date' column to Date object
 credit$Date <- as.Date(credit$Date)
@@ -63,7 +63,7 @@ ui <- dashboardPage(
                 "About",
                 icon = icon("address-card"),
                 fluidRow(
-                  column(width = 8, tags$img(src = "crime.jpg", width = 600, height = 300)),
+                  column(width = 8, tags$img(src = "credit-card.jpg", width = 600, height = 300)),
                   tags$br(),
                   tags$a("Photo of Credit card transactions", align = "center"),
                   column(
@@ -100,7 +100,7 @@ ui <- dashboardPage(
                            tabPanel("Boxplot", value = "box", withSpinner(plotlyOutput("boxplot"), type = 1, color = "blue", size = 3)),
                            tabPanel("Stacked Bar Plot", value = "stack", withSpinner(plotlyOutput("stackedbar"), type = 1, color = "blue", size = 3)),
                            tabPanel("Pie Chart", value = "pie", withSpinner(plotlyOutput("piechart"), type = 1, color = "blue", size = 3)),
-                           tabPanel("Scatter Plot", value = "scatter", withSpinner(plotlyOutput("scatterplot"), type = 1, color = "blue", size = 3)),
+                           tabPanel("Violin Plot", value = "violin", withSpinner(plotlyOutput("violinplot"), type = 1, color = "blue", size = 3)),
                            tabPanel("Bar Plot", value = "bar", withSpinner(plotlyOutput("barplot"), type = 1, color = "blue", size = 3)),
                            tabPanel("Heatmap", value = "heat", withSpinner(plotlyOutput("heatmap"), type = 1, color = "blue", size = 3))
                          ))
@@ -248,7 +248,26 @@ server <- function(input, output) {
       layout(title = "Scatter Plot of Transaction Amount vs. Age",
              xaxis = list(title = "Age"),
              yaxis = list(title = "Transaction Amount"))
+  })##
+  output$violinplot <- renderPlotly({
+    filtered_data_plot <- filtered_data()
+    
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
+      return(NULL)
+    }
+    
+    # Assuming 'Category' is a factor variable
+    plot_ly(x = filtered_data_plot$Category, y = filtered_data_plot$Transaction.Amount,
+            type = "violin", box = list(visible = TRUE, width = 0.1),
+            line = list(color = "black"),
+            points = "all", jitter = 0.3, marker = list(color = "orange")) %>%
+      layout(title = "Violin Plot of Transaction Amount by Category",
+             xaxis = list(title = "Category"),
+             yaxis = list(title = "Transaction Amount"))
   })
+  
+  
   
   # Bar Plot
   output$barplot <- renderPlotly({
