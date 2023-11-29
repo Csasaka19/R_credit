@@ -3,6 +3,8 @@ library(shiny)
 library(dplyr)
 library(lubridate)
 library(plotly)
+library(shinydashboard)
+library(shinycssloaders)
 
 # Imports the data from a csv file
 credit <- read.csv("~/R_credit/Credit-App/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
@@ -30,72 +32,112 @@ heatmap_data <- table(more_credit$Age, more_credit$Category)
 more_credit$Category <- as.character(more_credit$Category)
 
 # Define UI
-ui <- navbarPage(
-  title = "Credit Card Transactions Analysis Dashboard",
+ui <- dashboardPage(
   
-  tabPanel(
-    "Plots View",
-    sidebarLayout(
-      sidebarPanel(
-        h1("SideBar"),
-        br(),
-        img(src = "credit2.jpg", height = 200, width = 200),
-        br(),
-        br(),
-        dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
-        br(),
-        selectInput("categoryFilter", "Select Category: ", choices = c("All", unique(more_credit$Category))),
-        sliderInput(inputId = "amountFilter", label = "Filter by Transaction Amount:", min = 0, max = max(more_credit$Transaction.Amount), value = c(0, max(more_credit$Transaction.Amount)))
-      ),
-      mainPanel(
-        h1("Credit Main Panel"),
-        h3("Features"),
-        h5(strong("Customer ID: "),"Unique identifiers for every customer"),
-        h5(strong("Name: "),"First name of the customer."),
-        h5(strong("Surname: "),"Last name of the customer."),
-        h5(strong("Gender: "),"The gender of the customer."),
-        h5(strong("Birthdate: "),"Date of birth for each customer."),
-        h5(strong("Transaction Amount: "),"The dollar amount for each transaction."),
-        h5(strong("Date: "),"Date when the transaction occurred."),
-        h5(strong("Merchant Name: "),"The name of the merchant where the transaction took place."),
-        h5(strong("Category: "),"Categorization of the transaction."),
-        h3("Why Analyze?"),
-        h5("1.Insight into Customer Behavior: Analyzing transaction frequency, amount, and categories provides insights into customer behavior and preferences."),
-        h5("2.Temporal Trends: Analyzing transactions over time helps identify temporal trends, seasonality, or patterns valuable for understanding customer behavior."),
-        h5("3.Identifying Outliers: Plots like boxplots and histograms aid in identifying outliers in transaction amounts, allowing for further investigation."),
-        h5("4.Demographic Analysis: Age and gender analysis helps understand the demographics of customers and their spending patterns."),
-        h5("5.Category Insights: Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers."),
-        tabsetPanel(
-          tabPanel("Histogram", plotlyOutput("histogram")),
-          tabPanel("Boxplot", plotlyOutput("boxplot")),
-          tabPanel("Stacked Bar Plot", plotlyOutput("stackedbar")),
-          tabPanel("Pie Chart", plotlyOutput("piechart")),
-          tabPanel("Scatter Plot", plotlyOutput("scatterplot")),
-          tabPanel("Bar Plot", plotlyOutput("barplot")),
-          tabPanel("Heatmap", plotlyOutput("heatmap"))
-        )
-      )
+  # Header Area of the web dashboard.
+  dashboardHeader(title = "Credit Card Transactions Analysis Dashboard", titleWidth = 650,
+                  tags$li(class="dropdown",tags$a(href="" ,icon("linkedin"), "My Profile", target="_blank")),
+                  tags$li(class="dropdown",tags$a(href="https://www.github.com/Csasaka19/R_credit", icon("github"), "Source Code", target="_blank"))),
+  
+  # Main side menu displaying options of the dashboard
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Dataset", tabName = "data", icon = icon("database")),
+      menuItem("Visualization", tabName = "vis", icon = icon("chart-line")),
+      menuItem("Customer Details", tabName = "add", icon = icon("info-circle")),
+      menuItem("Developers", tabName = "devs", icon = icon("code"))
     )
   ),
   
-  tabPanel(
-    "Additional Options",
-    sidebarLayout(
-      sidebarPanel(
-        h1("Additional Options"),
-        br(),
-        checkboxInput("showDetails", "Show Customer Details", value = FALSE)
-      ),
-      mainPanel(
-        h1("Customer Details"),
-        conditionalPanel(
-          condition = "input.showDetails",
-          dataTableOutput("customerTable")
+  # Various main pages to be displayed when a certain menu item is chosen from the sidebar
+  dashboardBody(
+    tabItems(
+      # Intro to the dataset and some options to play with the data.
+      tabItem(
+        tabName = "data",
+        tabBox(
+          id = "t1",
+          width = 12,
+          tabPanel(
+            "About",
+            icon = icon("address-card"),
+            fluidRow(
+              column(width = 8, tags$img(src = "crime.jpg", width = 600, height = 300)),
+              tags$br(),
+              tags$a("Photo of Credit card transactions", align = "center"),
+              column(
+                width = 4,
+                tags$br(),
+                tags$p("This dataset description placeholder......"),
+                tags$br(),
+                tags$p(tags$strong("Why Analyze?")),
+                tags$ul(
+                  tags$li("Insight into Customer Behavior: Analyzing transaction frequency, amount, and categories provides insights into customer behavior and preferences."),
+                  tags$li("Temporal Trends: Analyzing transactions over time helps identify temporal trends, seasonality, or patterns valuable for understanding customer behavior."),
+                  tags$li("Identifying Outliers: Plots like boxplots and histograms aid in identifying outliers in transaction amounts, allowing for further investigation."),
+                  tags$li("Demographic Analysis: Age and gender analysis helps understand the demographics of customers and their spending patterns."),
+                  tags$li("Category Insights: Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers.")
+                )
+              )
+            )
+          ),
+          tabPanel("Data", dataTableOutput("dataT"), icon = icon("table")),
+          tabPanel("Structure", verbatimTextOutput("structure"), icon = icon("uncharted")),
+          tabPanel("Summary Stats", verbatimTextOutput("summary"), icon = icon("chart-pie"))
         )
-      )
-    )
-  )
-)
+      ),
+           
+  # The visual part of the project(some basic plots created by the group.
+  tabItem(tabName = "vis",
+          dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
+                 br(),
+                selectInput("categoryFilter", "Select Category: ", choices = c("All", unique(more_credit$Category))),
+          
+          tabBox(id = "t2", width = 12,
+                 tabsetPanel(
+                   tabPanel("Histogram", value = "hist", withSpinner(plotlyOutput("histogram"), type = 1, color = "blue", size = 3)),
+                   tabPanel("Boxplot", value = "box", withSpinner(plotlyOutput("boxplot"), type = 1, color = "blue", size = 3)),
+                   tabPanel("Stacked Bar Plot", value = "stack", withSpinner(plotlyOutput("stackedbar"), type = 1, color = "blue", size = 3)),
+                   tabPanel("Pie Chart", value = "pie", withSpinner(plotlyOutput("piechart"), type = 1, color = "blue", size = 3)),
+                   tabPanel("Scatter Plot", value = "scatter", withSpinner(plotlyOutput("scatterplot"), type = 1, color = "blue", size = 3)),
+                   tabPanel("Bar Plot", value = "bar", withSpinner(plotlyOutput("barplot"), type = 1, color = "blue", size = 3)),
+                   tabPanel("Heatmap", value = "heat", withSpinner(plotlyOutput("heatmap"), type = 1, color = "blue", size = 3))
+                        ))
+          ),
+  
+  
+  
+  tabItem(
+    tabName = "add",
+    tabBox(id = "t3", width = 12,
+           tabPanel(
+             "Browse Customer Details",
+             sidebarLayout(
+               sidebarPanel(
+                 h1("Customers in the Dataset"),
+                 br(),
+                 checkboxInput("showDetails", "Show Customer Details", value = FALSE)
+               ),
+               mainPanel(
+                 h1("Customer Details"),
+                 conditionalPanel(
+                   condition = "input.showDetails",
+                   dataTableOutput("customerTable")
+                 )
+               )
+             )
+             
+           )
+  )),
+  
+tabItem(
+    tabName = "devs",
+    tabBox(id = 4, width = 12,
+           tabPanel(
+       tags$h1("Developers placeholder")
+  ))
+))))
+
 
 # Define server
 server <- function(input, output) {
