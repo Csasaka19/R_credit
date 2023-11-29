@@ -62,22 +62,16 @@ ui <- dashboardPage(
                 "About",
                 icon = icon("address-card"),
                 fluidRow(
-                  column(width = 8, tags$img(src = "crime.jpg", width = 600, height = 300)),
+                  column(width = 8, tags$img(src = "crime.jpg", width = 600, height = 300), tags$a("Photo of Credit Cards", align = "left")),
                   tags$br(),
-                  tags$a("Photo of Credit card transactions", align = "center"),
                   column(
                     width = 4,
                     tags$br(),
-                    tags$p("This dataset description placeholder......"),
+                    tags$h2("Description:"),
+                    tags$p("Welcome to the world of credit card transactions! This dataset provides a treasure trove of insights into customers' spending habits, transactions, and more. Whether you're a data scientist, analyst, or just someone curious about how money moves, this dataset is for you."),
                     tags$br(),
-                    tags$p(tags$strong("Why Analyze?")),
-                    tags$ul(
-                      tags$li("Insight into Customer Behavior: Analyzing transaction frequency, amount, and categories provides insights into customer behavior and preferences."),
-                      tags$li("Temporal Trends: Analyzing transactions over time helps identify temporal trends, seasonality, or patterns valuable for understanding customer behavior."),
-                      tags$li("Identifying Outliers: Plots like boxplots and histograms aid in identifying outliers in transaction amounts, allowing for further investigation."),
-                      tags$li("Demographic Analysis: Age and gender analysis helps understand the demographics of customers and their spending patterns."),
-                      tags$li("Category Insights: Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers.")
-                    )
+                    tags$p(tags$strong("Why this dataset matters:")),
+                    tags$p("Understanding consumer spending patterns is crucial for businesses and financial institutions. This dataset is a goldmine for exploring trends, patterns, and anomalies in financial behavior. It can be used for fraud detection, marketing strategies, and much more.")
                   )
                 )
               ),
@@ -133,9 +127,7 @@ ui <- dashboardPage(
           tabItem(
             tabName = "devs",
             tabBox(id = 4, width = 12,
-                   tabPanel(
-                     tags$h1("Developers placeholder")
-                   ))
+                   )
           ))))
 
 
