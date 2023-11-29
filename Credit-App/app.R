@@ -7,7 +7,7 @@ library(shinydashboard)
 library(shinycssloaders)
 
 # Imports the data from a csv file
-credit <- read.csv("~/Documents/R_3.1Project/R_credit/Credit-App/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
+credit <- read.csv("~/R_credit/Credit-App/credit_card_transaction_flow.csv", stringsAsFactors = FALSE)
 
 # Convert the 'Date' column to Date object
 credit$Date <- as.Date(credit$Date)
@@ -62,11 +62,7 @@ ui <- dashboardPage(
                 "About",
                 icon = icon("address-card"),
                 fluidRow(
-<<<<<<< HEAD
-                  column(width = 8, tags$img(src = "crime.jpg", width = 600, height = 300), tags$a("Photo of Credit Cards", align = "left")),
-=======
-                  column(width = 8, tags$img(src = "credit-card.jpg", width = 600, height = 300)),
->>>>>>> 6198399026fc8d2ddc7eea9472287f2ccc9080eb
+                  column(width = 8, tags$img(src = "credit-card.jpg", width = 600, height = 300), tags$a("Photo of Credit Card", align = "left")),
                   tags$br(),
                   column(
                     width = 4,
