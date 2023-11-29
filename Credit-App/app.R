@@ -62,7 +62,7 @@ ui <- dashboardPage(
                 "About",
                 icon = icon("address-card"),
                 fluidRow(
-                  column(width = 8, tags$img(src = "credit-card.jpg", width = 600, height = 300), tags$a("Photo of Credit Card", align = "left")),
+                  column(width = 8, tags$img(src = "credit-card.jpg", width = 600, height = 300), tags$a("Photo of a Credit Card", align = "left")),
                   tags$br(),
                   column(
                     width = 4,
