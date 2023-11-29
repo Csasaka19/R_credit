@@ -36,7 +36,6 @@ ui <- dashboardPage(
   
   # Header Area of the web dashboard.
   dashboardHeader(title = "Credit Card Transactions Analysis Dashboard", titleWidth = 650,
-                  tags$li(class="dropdown",tags$a(href="" ,icon("linkedin"), "My Profile", target="_blank")),
                   tags$li(class="dropdown",tags$a(href="https://www.github.com/Csasaka19/R_credit", icon("github"), "Source Code", target="_blank"))),
   
   # Main side menu displaying options of the dashboard
@@ -153,6 +152,7 @@ server <- function(input, output) {
     }
   )
   
+  # Display summary of the data
   output$summary <- renderPrint({
     more_credit %>% summary()
   })
