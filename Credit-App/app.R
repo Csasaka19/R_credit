@@ -143,6 +143,21 @@ ui <- dashboardPage(
 # Define server
 server <- function(input, output) {
   
+  # Data table output for browsing.
+  output$dataT <- renderDataTable(more_credit)
+  
+  # For structure output for the user to see
+  output$structure <- renderPrint(
+    {
+      more_credit %>% str()
+    }
+  )
+  
+  output$summary <- renderPrint({
+    more_credit %>% summary()
+  })
+  
+  
   filtered_data <- reactive({
     # Apply filters to the data
     filtered_data <- more_credit
