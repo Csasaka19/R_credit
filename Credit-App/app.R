@@ -25,7 +25,7 @@ more_credit <- credit %>%
     Transaction_Category_Count = ave(Transaction.Amount, Category, FUN = length)
   )
 
-# New table for the the heatmap
+# New table for the heatmap
 heatmap_data <- table(more_credit$Age, more_credit$Category)
 
 # Convert more_credit$Category to a factor
@@ -49,94 +49,95 @@ ui <- dashboardPage(
     )
   ),
   
-  # Various main pages to be displayed when a certain menu item is chosen from the sidebar
-  dashboardBody(
-    tabItems(
-      # Intro to the dataset and some options to play with the data.
-      tabItem(
-        tabName = "data",
-        tabBox(
-          id = "t1",
-          width = 12,
-          tabPanel(
-            "About",
-            icon = icon("address-card"),
-            fluidRow(
-              column(width = 8, tags$img(src = "crime.jpg", width = 600, height = 300)),
-              tags$br(),
-              tags$a("Photo of Credit card transactions", align = "center"),
-              column(
-                width = 4,
-                tags$br(),
-                tags$p("This dataset description placeholder......"),
-                tags$br(),
-                tags$p(tags$strong("Why Analyze?")),
-                tags$ul(
-                  tags$li("Insight into Customer Behavior: Analyzing transaction frequency, amount, and categories provides insights into customer behavior and preferences."),
-                  tags$li("Temporal Trends: Analyzing transactions over time helps identify temporal trends, seasonality, or patterns valuable for understanding customer behavior."),
-                  tags$li("Identifying Outliers: Plots like boxplots and histograms aid in identifying outliers in transaction amounts, allowing for further investigation."),
-                  tags$li("Demographic Analysis: Age and gender analysis helps understand the demographics of customers and their spending patterns."),
-                  tags$li("Category Insights: Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers.")
+      
+      # Various main pages to be displayed when a certain menu item is chosen from the sidebar
+      dashboardBody(
+        tabItems(
+          # Intro to the dataset and some options to play with the data.
+          tabItem(
+            tabName = "data",
+            tabBox(
+              id = "t1",
+              width = 12,
+              tabPanel(
+                "About",
+                icon = icon("address-card"),
+                fluidRow(
+                  column(width = 8, tags$img(src = "crime.jpg", width = 600, height = 300)),
+                  tags$br(),
+                  tags$a("Photo of Credit card transactions", align = "center"),
+                  column(
+                    width = 4,
+                    tags$br(),
+                    tags$p("This dataset description placeholder......"),
+                    tags$br(),
+                    tags$p(tags$strong("Why Analyze?")),
+                    tags$ul(
+                      tags$li("Insight into Customer Behavior: Analyzing transaction frequency, amount, and categories provides insights into customer behavior and preferences."),
+                      tags$li("Temporal Trends: Analyzing transactions over time helps identify temporal trends, seasonality, or patterns valuable for understanding customer behavior."),
+                      tags$li("Identifying Outliers: Plots like boxplots and histograms aid in identifying outliers in transaction amounts, allowing for further investigation."),
+                      tags$li("Demographic Analysis: Age and gender analysis helps understand the demographics of customers and their spending patterns."),
+                      tags$li("Category Insights: Analyzing transaction categories provides insights into which types of merchants or transactions are more common among customers.")
+                    )
+                  )
                 )
-              )
+              ),
+              tabPanel("Data", dataTableOutput("dataT"), icon = icon("table")),
+              tabPanel("Structure", verbatimTextOutput("structure"), icon = icon("uncharted")),
+              tabPanel("Summary Stats", verbatimTextOutput("summary"), icon = icon("chart-pie"))
             )
           ),
-          tabPanel("Data", dataTableOutput("dataT"), icon = icon("table")),
-          tabPanel("Structure", verbatimTextOutput("structure"), icon = icon("uncharted")),
-          tabPanel("Summary Stats", verbatimTextOutput("summary"), icon = icon("chart-pie"))
-        )
-      ),
-           
-  # The visual part of the project(some basic plots created by the group.
-  tabItem(tabName = "vis",
-          dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
-                 br(),
-                selectInput("categoryFilter", "Select Category: ", choices = c("All", unique(more_credit$Category))),
           
-          tabBox(id = "t2", width = 12,
-                 tabsetPanel(
-                   tabPanel("Histogram", value = "hist", withSpinner(plotlyOutput("histogram"), type = 1, color = "blue", size = 3)),
-                   tabPanel("Boxplot", value = "box", withSpinner(plotlyOutput("boxplot"), type = 1, color = "blue", size = 3)),
-                   tabPanel("Stacked Bar Plot", value = "stack", withSpinner(plotlyOutput("stackedbar"), type = 1, color = "blue", size = 3)),
-                   tabPanel("Pie Chart", value = "pie", withSpinner(plotlyOutput("piechart"), type = 1, color = "blue", size = 3)),
-                   tabPanel("Scatter Plot", value = "scatter", withSpinner(plotlyOutput("scatterplot"), type = 1, color = "blue", size = 3)),
-                   tabPanel("Bar Plot", value = "bar", withSpinner(plotlyOutput("barplot"), type = 1, color = "blue", size = 3)),
-                   tabPanel("Heatmap", value = "heat", withSpinner(plotlyOutput("heatmap"), type = 1, color = "blue", size = 3))
-                        ))
+          # The visual part of the project(some basic plots created by the group.
+          tabItem(tabName = "vis",
+                  dateRangeInput("dateRange", "Select Date Range", start = min(more_credit$Date), end = max(more_credit$Date)),
+                  br(),
+                  selectInput("categoryFilter", "Select Category: ", choices = c("All", unique(more_credit$Category))),
+                  
+                  tabBox(id = "t2", width = 12,
+                         tabsetPanel(
+                           tabPanel("Histogram", value = "hist", withSpinner(plotlyOutput("histogram"), type = 1, color = "blue", size = 3)),
+                           tabPanel("Boxplot", value = "box", withSpinner(plotlyOutput("boxplot"), type = 1, color = "blue", size = 3)),
+                           tabPanel("Stacked Bar Plot", value = "stack", withSpinner(plotlyOutput("stackedbar"), type = 1, color = "blue", size = 3)),
+                           tabPanel("Pie Chart", value = "pie", withSpinner(plotlyOutput("piechart"), type = 1, color = "blue", size = 3)),
+                           tabPanel("Scatter Plot", value = "scatter", withSpinner(plotlyOutput("scatterplot"), type = 1, color = "blue", size = 3)),
+                           tabPanel("Bar Plot", value = "bar", withSpinner(plotlyOutput("barplot"), type = 1, color = "blue", size = 3)),
+                           tabPanel("Heatmap", value = "heat", withSpinner(plotlyOutput("heatmap"), type = 1, color = "blue", size = 3))
+                         ))
           ),
-  
-  
-  
-  tabItem(
-    tabName = "add",
-    tabBox(id = "t3", width = 12,
-           tabPanel(
-             "Browse Customer Details",
-             sidebarLayout(
-               sidebarPanel(
-                 h1("Customers in the Dataset"),
-                 br(),
-                 checkboxInput("showDetails", "Show Customer Details", value = FALSE)
-               ),
-               mainPanel(
-                 h1("Customer Details"),
-                 conditionalPanel(
-                   condition = "input.showDetails",
-                   dataTableOutput("customerTable")
-                 )
-               )
-             )
-             
-           )
-  )),
-  
-tabItem(
-    tabName = "devs",
-    tabBox(id = 4, width = 12,
-           tabPanel(
-       tags$h1("Developers placeholder")
-  ))
-))))
+          
+          
+          
+          tabItem(
+            tabName = "add",
+            tabBox(id = "t3", width = 12,
+                   tabPanel(
+                     "Browse Customer Details",
+                     sidebarLayout(
+                       sidebarPanel(
+                         h1("Customers in the Dataset"),
+                         br(),
+                         checkboxInput("showDetails", "Show Customer Details", value = FALSE)
+                       ),
+                       mainPanel(
+                         h1("Customer Details"),
+                         conditionalPanel(
+                           condition = "input.showDetails",
+                           dataTableOutput("customerTable")
+                         )
+                       )
+                     )
+                     
+                   )
+            )),
+          
+          tabItem(
+            tabName = "devs",
+            tabBox(id = 4, width = 12,
+                   tabPanel(
+                     tags$h1("Developers placeholder")
+                   ))
+          ))))
 
 
 # Define server
@@ -161,8 +162,8 @@ server <- function(input, output) {
   output$histogram <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -174,17 +175,17 @@ server <- function(input, output) {
   })
   
   # Boxplot
-  output$boxplot <- renderPlotly({
+  output$boxplot2 <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
-    plot_ly(filtered_data_plot, x = ~Category, y = ~Transaction.Amount, type = "box") %>%
-      layout(title = "Boxplot of Categories by Transaction",
-             xaxis = list(title = "Categories"),
+    plot_ly(filtered_data_plot, y = ~Transaction.Amount, color = ~Category, type = "box") %>%
+      layout(title = "Box Plot on Transaction Amount",
+             xaxis = list(title = "Category"),
              yaxis = list(title = "Transaction Amount in Dollars"))
   })
   
@@ -192,8 +193,8 @@ server <- function(input, output) {
   output$stackedbar <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -207,8 +208,8 @@ server <- function(input, output) {
   output$piechart <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -223,8 +224,8 @@ server <- function(input, output) {
   output$scatterplot <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -238,8 +239,8 @@ server <- function(input, output) {
   output$barplot <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -254,8 +255,8 @@ server <- function(input, output) {
   output$heatmap <- renderPlotly({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
@@ -271,8 +272,8 @@ server <- function(input, output) {
   output$customerTable <- renderDataTable({
     filtered_data_plot <- filtered_data()
     
-    if (is.null(filtered_data_plot) || nrow(filtered_data_plot) == 0) {
-      # Handle the case when the filtered data is empty or NULL
+    # Check if the filtered data frame is empty
+    if (nrow(filtered_data_plot) == 0) {
       return(NULL)
     }
     
