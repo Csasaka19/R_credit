@@ -127,8 +127,66 @@ ui <- dashboardPage(
           tabItem(
             tabName = "devs",
             tabBox(id = 4, width = 12,
+                   tabPanel(
+                     "Contributors: ",
+                     fluidRow(
+                       column(3,
+                              box(
+                                title = "Clive Sasaka",
+                                status = "primary",
+                                solidHeader = TRUE,
+                                collapsible = TRUE,
+                                width = 12,
+                                align = "center",
+                                tags$img(src = "github.png", width = 60, height = 60),
+                                tags$p(strong("Csasaka19")),
+                                tags$a("GitHub Profile", href = "https://github.com/Csasaka19", target = "_blank")
+                              )
+                       ),
+                       column(3,
+                              box(
+                                title = "Baraka Mbugua",
+                                status = "primary",
+                                solidHeader = TRUE,
+                                collapsible = TRUE,
+                                width = 12,
+                                align = "center",
+                                tags$img(src = "github.png", width = 60, height = 60),
+                                tags$p(strong("eiidoubleyuwes")),
+                                tags$a("GitHub Profile", href = "https://github.com/eiidoubleyuwes", target = "_blank")
+                              )
+                       ),
+                       column(3,
+                              box(
+                                title = "Eugene Mwangi",
+                                status = "primary",
+                                solidHeader = TRUE,
+                                collapsible = TRUE,
+                                width = 12,
+                                align = "center",
+                                tags$img(src = "github.png", width = 60, height = 60),
+                                tags$p(strong("Eugene600")),
+                                tags$a("GitHub Profile", href = "https://github.com/Eugene600", target = "_blank")
+                              )
+                       ),
+                       column(3,
+                              box(
+                                title = "Desiree Michere",
+                                status = "primary",
+                                solidHeader = TRUE,
+                                collapsible = TRUE,
+                                width = 12,
+                                align = "center",
+                                tags$img(src = "github.png", width = 60, height = 60),
+                                tags$p(strong("DeeMichere")),
+                                tags$a("GitHub Profile", href = "https://github.com/DeeMichere", target = "_blank")
+                              )
+                       )
+                     )
                    )
-          ))))
+            )
+          )
+        )))
 
 
 # Define server
